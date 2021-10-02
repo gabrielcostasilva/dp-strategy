@@ -36,7 +36,7 @@ public class AppTest {
 
         var details = pestProcessor.getDetails(pestSample);        
 
-        // Test whether we've got disease details
+        // Test whether we've got pest details
         assertTrue(details.getInfo().startsWith("Soya Pest"));
         assertFalse(details.getInfo().startsWith("Soya Disease"));
     }
@@ -51,7 +51,7 @@ public class AppTest {
 
         var details = pulvProcessor.getDetails(pulvSample);        
 
-        // Test whether we've got disease details
+        // Test whether we've got pulverisation details
         assertTrue(details.getInfo().startsWith("Soya pulv"));
         assertFalse(details.getInfo().startsWith("Soya Disease"));
     }    
