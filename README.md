@@ -1,34 +1,28 @@
-# Strategy Design Pattern Example
-Although this project is not based on any particular tutorial, I mainly used the [Refactoring Guru](https://refactoring.guru/design-patterns/strategy/) explanation as reference while coding.
+# Strategy Design Pattern Example - Using java.util.Function 
+This branch replaces the _strategy_ hierarchy with java.util.Function. Please refer to the [main branch](https://github.com/gabrielcostasilva/dp-strategy.git) to better understand the project.
 
-## Project Overview
-The use case considers a `SampleDetail` data extraction process. A `Sample` might carry data for _pest_, _disease_ or _pulverisation_. The `SampleDetail` varies with the `Sample` type. However, the `Sample` type is only revealed at runtime, according to the data it carries. This is when the Strategy DP comes in handy.
-
-`SoyaPulverisationDetailProvider`, `SoyaPestDetailProvider`, and `SoyaDiseaseDetailProvider` are _concrete strategies_ (algorithms) for extracting detail data from a `Sample`. These _concrete strategies_ are based on a common interface: `SampleDetailProviderStrategy`. Therefore, they share the `getDetails(Sample): SampleDetail` method. 
-
-The `SampleProcessorContext` class provides access to the _concrete strategies_. The class represents the _context_, in the Strategy DP structure. It provides a `getDetails(Sample): SampleDetail` method that mediates the access to one of the _concrete strategies_. The _context_ sets the _concrete strategy_ during its instantiation, via `SampleProcessorContext.SampleProcessorContext(SampleDetailProviderStrategy)` constructor. The resulting `SampleDetail` carries the details of the processed `Sample`.
-
-## Class Structure
+## Changes
+The original structure consisted of a _context_ class and four classifiers. `SampleDetailProviderStrategy` defines the contract for concrete _strategy_ implementations. `SoyaPulverisationDetailProvider`, `SoyaPestDetailProvider` and `SoyaDiseaseDetailProvider` implement the contract, representing concrete _strategies_.
 
 <img src="./pics/ClassDiagram.png" />
 
-* `Sample` is an entity that carries information about _pest_, _disease_, or _pulverisation_. Each of these items have different data. The entity is classed according to the data it carries. But, the data is only known at runtime;
+Since Java 8 came out, many approaches to improve design patterns with new Java features have been proposed. Using `java.util.Function` for improving the _Strategy Design Pattern_ is one of them.
 
-* `SampleDetail` is an entity that stores `Sample` details. This entity must be specific for _pest_, _disease_, or _pulverisation_. Therefore, different data must be extracted from `Sample` to assembling a `SampleDetail`;
+In fact, one can observe that `SampleDetailProviderStrategy` is a _functional interface_. It is also very similar to `java.util.Function` as it receives a parameter and returns an object. 
 
-* `SampleProcessorContext` is a mediator class that gives access to different `SampleDetailProviderStrategy` implementations. It has a private attribute (`detailStrategy`), set via the constructor during the class instatiation. This attribute defines the _concrete strategy_ to adopt; 
+Therefore, one can significantly reduce the number of classes by using `java.util.Function` instead of creating an entire new hierarchy of classes.
 
-* `SampleDetailProviderStrategy` is a Java `interface` that sets a common method for _concrete strategies_. This common method represents the expected behaviour of any `SampleDetailProviderStrategy`;
+The figure below highlights the changes in the _context_ class.
 
-* `SoyaPulverisationDetailProvider`, `SoyaPestDetailProvider`, and `SoyaDiseaseDetailProvider` represent _concrete strategies_ that identify the `Sample` type and creates a `SampleDetail` according to the data.
+<img src="./pics/context-change.png" />
 
-## Flow Structure
+**However, note that** the behaviour implemented in the _strategy_ classes now moved to the _client_, responsible for calling the _context_ class. The figure below shows this change, which is clearly seen in the test class.
 
-<img src="./pics/SequenceDiagram.png" />
+<img src="./pics/test-change.png" />
 
-The Figure shows the test execution for a _disease_ `Sample` type. A `Sample` is instantiated, simulating a _disease_ sample type. A `SampleProcessorContext` is instantiated with a _concrete_ `SampleDetailProviderStrategy` - in this case, the `SoyaDiseaseDetailProvider` _strategy_. 
+> Notice that the prior test just instantiated the _strategy_ (line 20), but the new test is now responsible for implementing the behaviour (lines 16-20).
 
-When `SampleProcessorContext.getDetails(Sample)` is invoked, the request is passed to `SoyaDiseaseDetailProvider.getDetails(Sample): SampleDetail`. 
+Moving the _strategy_ to the client makes the project more extensible as the client can implement new _strategies_ whenever it is necessary. On the other hand, one may expect to have ready-to-use _strategies_.
 
 ## Project Setup
 ```
