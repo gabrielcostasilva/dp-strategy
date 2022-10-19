@@ -1,19 +1,19 @@
 package com.example;
 
-import com.example.detail.SampleDetailProviderStrategy;
+import java.util.function.Function;
 
 public class SampleProcessorContext {
 
-    private SampleDetailProviderStrategy detailStrategy;
+    private Function<Sample, SampleDetail> detailStrategy;
 
     public SampleProcessorContext(
-        final SampleDetailProviderStrategy detailStrategy) {
+        final Function<Sample, SampleDetail> detailStrategy) {
         
             this.detailStrategy = detailStrategy;
     }
 
     public SampleDetail getDetails(final Sample aSample) {
-        return detailStrategy.getDetails(aSample);
+        return detailStrategy.apply(aSample);
     } 
 
 }

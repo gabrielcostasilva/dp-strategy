@@ -3,10 +3,6 @@ package com.example;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.detail.SoyaDiseaseDetailProvider;
-import com.example.detail.SoyaPestDetailProvider;
-import com.example.detail.SoyaPulverisationDetailProvider;
-
 import org.junit.jupiter.api.Test;
 
 public class AppTest {
@@ -17,7 +13,11 @@ public class AppTest {
         var diseaseSample = new Sample("soya_disease_collector", new String[] {"a", "b", "c"});
 
         var diseaseProcessor =
-            new SampleProcessorContext(new SoyaDiseaseDetailProvider());
+            new SampleProcessorContext(aSample -> 
+                new SampleDetail(
+                    String.format(
+                    "Soya Disease: %s", 
+                            aSample.getSomeDetails().toString())));
 
         var details = diseaseProcessor.getDetails(diseaseSample);        
 
@@ -32,7 +32,12 @@ public class AppTest {
         var pestSample = new Sample("soya_pest", new String[] {"a", "b", "c"});
 
         var pestProcessor =
-            new SampleProcessorContext(new SoyaPestDetailProvider());
+            new SampleProcessorContext(aSample -> 
+                new SampleDetail(
+                    String.format(
+                        "Soya Pest: %s", 
+                        aSample.getSomeDetails().toString()))
+                );
 
         var details = pestProcessor.getDetails(pestSample);        
 
@@ -47,7 +52,13 @@ public class AppTest {
         var pulvSample = new Sample("soya_pulverisation", new String[] {"a", "b", "c"});
 
         var pulvProcessor =
-            new SampleProcessorContext(new SoyaPulverisationDetailProvider());
+            new SampleProcessorContext(aSample -> 
+                new SampleDetail(
+                        String.format(
+                            "Soya pulv: %s", 
+                            aSample.getSomeDetails().toString())
+                )
+            );
 
         var details = pulvProcessor.getDetails(pulvSample);        
 
