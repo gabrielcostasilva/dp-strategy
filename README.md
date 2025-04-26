@@ -1,6 +1,8 @@
 # Strategy Design Pattern Example
 Although this project is not based on any particular tutorial, I mainly used the [Refactoring Guru](https://refactoring.guru/design-patterns/strategy/) explanation as reference while coding.
 
+> You can also check out the [Ruby version](https://github.com/gabrielcostasilva/dp-strategy-ruby.git), which uses a simpler example.
+
 ## Project Overview
 The use case considers a `SampleDetail` data extraction process. A `Sample` might carry data for _pest_, _disease_ or _pulverisation_. The `SampleDetail` varies with the `Sample` type. However, the `Sample` type is only revealed at runtime, according to the data it carries. This is when the Strategy DP comes in handy.
 
